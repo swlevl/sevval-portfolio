@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poster Details | Frame by Frame</title>
+    <meta name="description" content="Poster Details">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; color: inherit;">Frame by Frame</a>
+            </div>
+            
+            <div class="nav-content" id="navContent">
+                <ul class="nav-links">
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="posters.html">Work</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="details-main" style="padding-top: 120px; min-height: 100vh;">
+        <div class="details-container">
+            <a href="javascript:history.back()" class="back-link">&larr; Back to Gallery</a>
+            <div class="details-layout">
+                <div class="details-image-container">
+                    <img id="movieImage" src="" alt="Loading" class="details-image">
+                </div>
+                <div class="details-content">
+                    <h1 id="movieTitle" class="details-title">Loading...</h1>
+                    <div class="details-meta">
+                        <p><strong>Director:</strong> <span id="movieDirector"></span></p>
+                        <p><strong>Cast:</strong> <span id="movieCast"></span></p>
+                    </div>
+                    <div class="details-description">
+                        <p id="movieDescription"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Frame by Frame. Designed with passion.</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="details.js"></script>
+</body>
+</html>
