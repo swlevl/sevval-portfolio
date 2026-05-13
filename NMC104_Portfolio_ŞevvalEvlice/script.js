@@ -12,6 +12,110 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Modal Injection & Logic
+    const modalHTML = `
+    <div id="posterModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-layout">
+                <div class="modal-image-container">
+                    <img id="modalImage" src="" alt="">
+                </div>
+                <div class="modal-info">
+                    <h2 id="modalTitle"></h2>
+                    <div class="modal-meta">
+                        <p><strong>Director:</strong> <span id="modalDirector"></span></p>
+                        <p><strong>Cast:</strong> <span id="modalCast"></span></p>
+                    </div>
+                    <div class="modal-description">
+                        <p id="modalDesc"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modal = document.getElementById('posterModal');
+    const closeModalBtn = document.querySelector('.close-modal');
+
+    function openModal(id) {
+        if (typeof posterDatabase !== 'undefined' && posterDatabase[id]) {
+            const data = posterDatabase[id];
+            document.getElementById('modalImage').src = data.image;
+            document.getElementById('modalImage').alt = data.title;
+            if (id === 'fleabag' || id === 'little-women') {
+                document.getElementById('modalImage').style.objectPosition = 'top';
+            } else {
+                document.getElementById('modalImage').style.objectPosition = 'center';
+            }
+            document.getElementById('modalTitle').textContent = data.title;
+            document.getElementById('modalDirector').textContent = data.director;
+            document.getElementById('modalCast').textContent = data.cast;
+            document.getElementById('modalDesc').textContent = data.description;
+            
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+    }
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+    });
+
+    // View Controls Toggle Logic
+    const btnBig = document.getElementById('btn-big');
+    const btnCompact = document.getElementById('btn-compact');
+    const gallery = document.querySelector('.gallery');
+    const viewSettingsBtn = document.getElementById('view-settings-btn');
+    const viewDropdown = document.getElementById('view-dropdown');
+
+    if (viewSettingsBtn && viewDropdown) {
+        viewSettingsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            viewDropdown.classList.toggle('show');
+            viewSettingsBtn.classList.toggle('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (!viewDropdown.contains(e.target) && !viewSettingsBtn.contains(e.target)) {
+                viewDropdown.classList.remove('show');
+                viewSettingsBtn.classList.remove('active');
+            }
+        });
+    }
+
+    if (btnBig && btnCompact && gallery) {
+        btnBig.addEventListener('click', () => {
+            gallery.classList.remove('compact-view');
+            btnBig.classList.add('active');
+            btnCompact.classList.remove('active');
+            if (viewDropdown) {
+                viewDropdown.classList.remove('show');
+                viewSettingsBtn.classList.remove('active');
+            }
+        });
+        btnCompact.addEventListener('click', () => {
+            gallery.classList.add('compact-view');
+            btnCompact.classList.add('active');
+            btnBig.classList.remove('active');
+            if (viewDropdown) {
+                viewDropdown.classList.remove('show');
+                viewSettingsBtn.classList.remove('active');
+            }
+        });
+    }
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -58,6 +162,17 @@ document.addEventListener('DOMContentLoaded', () => {
     posterCards.forEach((card, index) => {
         card.style.transitionDelay = `${index * 0.1}s`;
         observer.observe(card);
+
+        // Intercept clicks to open modal instead of navigation
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = card.getAttribute('href');
+            // Extract the 'id' parameter manually
+            const idParam = href.split('id=')[1];
+            if (idParam) {
+                openModal(idParam);
+            }
+        });
     });
 
     // Hero Slider Logic
@@ -109,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     currentIndex = index;
                     updateSlider();
                 } else {
-                    window.location.href = `details.html?id=${sliderIds[index]}`;
+                    openModal(sliderIds[index]);
                 }
             });
         });
