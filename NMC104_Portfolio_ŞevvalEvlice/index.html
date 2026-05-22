@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>document.documentElement.classList.add('js');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frame by Frame | Portfolio</title>
+    <title>Frame by Şevval | Portfolio</title>
     <meta name="description" content="Personal portfolio of Şevval, a New Media student showcasing poster designs.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=3.4">
 </head>
 <body>
+    <a href="#work" class="skip-link">Skip to Selected Posters</a>
     <header class="header">
         <nav class="nav">
-            <div class="logo">Frame by Frame</div>
+            <a href="#home" class="logo" style="text-decoration: none; color: inherit;" aria-label="Frame by Şevval - Back to Home">Frame by Şevval</a>
             <div class="search-bar">
                 <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                <input type="text" id="posterSearch" placeholder="Search posters...">
+                <input type="text" id="posterSearch" placeholder="Search posters..." aria-label="Search posters by title">
             </div>
 
             <div class="nav-content" id="navContent">
@@ -27,7 +29,7 @@
                 </ul>
             </div>
 
-            <div class="hamburger" id="hamburger">
+            <div class="hamburger" id="hamburger" role="button" tabindex="0" aria-label="Toggle navigation menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -44,14 +46,16 @@
                 <a href="#work" class="btn">View My Work</a>
             </div>
             
-            <div class="hero-slider">
+            <div class="hero-slider" role="region" aria-label="Cinematic posters slider">
                 <div class="slider-track">
-                    <img src="assets/KILL BILL.png" class="slider-item active" alt="Kill Bill">
-                    <img src="assets/FLEABAG.png" class="slider-item next" alt="Fleabag">
-                    <img src="assets/WHIPLASH.png" class="slider-item" alt="Whiplash">
-                    <img src="assets/aftersun.png" class="slider-item" alt="Aftersun">
-                    <img src="assets/little women.png" class="slider-item" alt="Little Women">
-                    <img src="assets/PEARL.png" class="slider-item prev" alt="Pearl">
+                    <img src="assets/KILL BILL.png" class="slider-item active" alt="Kill Bill poster - Click to view details" tabindex="0" role="button">
+                    <img src="assets/FLEABAG.png" class="slider-item next" alt="Fleabag poster - Click to show" tabindex="0" role="button">
+                    <img src="assets/WHIPLASH.png" class="slider-item" alt="Whiplash poster - Click to show" tabindex="0" role="button">
+                    <img src="assets/aftersun.png" class="slider-item" alt="Aftersun poster - Click to show" tabindex="0" role="button">
+                    <img src="assets/little women.png" class="slider-item" alt="Little Women poster - Click to show" tabindex="0" role="button">
+                    <img src="assets/PEARL.png" class="slider-item prev" alt="Pearl poster - Click to show" tabindex="0" role="button">
+                    <img src="assets/EMMA.jpg" class="slider-item" alt="Emma poster - Click to show" tabindex="0" role="button">
+                    <img src="assets/how to lose a guy in 10 days (1).jpg" class="slider-item" alt="How to Lose a Guy in 10 Days poster - Click to show" tabindex="0" role="button">
                 </div>
             </div>
             
@@ -64,7 +68,7 @@
                 <h2>Selected Posters</h2>
                 <p>A collection of my unique poster designs.</p>
                 <div class="view-controls">
-                    <button id="view-settings-btn" class="view-settings-btn" aria-label="View Options">
+                    <button id="view-settings-btn" class="view-settings-btn" aria-label="View Options" aria-expanded="false" aria-haspopup="menu" aria-controls="view-dropdown">
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="3" y1="9" x2="21" y2="9"></line>
                             <circle cx="8" cy="9" r="2"></circle>
@@ -72,14 +76,14 @@
                             <circle cx="16" cy="15" r="2"></circle>
                         </svg>
                     </button>
-                    <div class="view-dropdown" id="view-dropdown">
-                        <div class="dropdown-header">Seçenekleri gör</div>
-                        <button id="btn-big" class="dropdown-item active">
-                            Varsayılan
+                    <div class="view-dropdown" id="view-dropdown" role="menu" aria-label="View options menu">
+                        <div class="dropdown-header" role="presentation">View options</div>
+                        <button id="btn-compact" class="dropdown-item" role="menuitemradio" aria-checked="false">
+                            Compact
                             <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         </button>
-                        <button id="btn-compact" class="dropdown-item">
-                            Kompakt
+                        <button id="btn-big" class="dropdown-item active" role="menuitemradio" aria-checked="true">
+                            Default
                             <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         </button>
                     </div>
@@ -87,7 +91,7 @@
             </div>
             
             <div class="gallery">
-                <a href="details.html?id=kill-bill" class="poster-card" style="text-decoration: none;">
+                <a href="details.html?id=kill-bill" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Kill Bill poster">
                     <div class="poster-image-wrapper">
                         <img src="assets/KILL BILL.png" alt="Kill Bill Poster" class="poster-image" loading="lazy">
                         <div class="poster-overlay">
@@ -96,7 +100,7 @@
                     </div>
                 </a>
 
-                <a href="details.html?id=fleabag" class="poster-card" style="text-decoration: none;">
+                <a href="details.html?id=fleabag" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Fleabag poster">
                     <div class="poster-image-wrapper">
                         <img src="assets/FLEABAG.png" alt="Fleabag Poster" class="poster-image" style="object-position: top;" loading="lazy">
                         <div class="poster-overlay">
@@ -105,7 +109,7 @@
                     </div>
                 </a>
 
-                <a href="details.html?id=whiplash" class="poster-card" style="text-decoration: none;">
+                <a href="details.html?id=whiplash" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Whiplash poster">
                     <div class="poster-image-wrapper">
                         <img src="assets/WHIPLASH.png" alt="Whiplash Poster" class="poster-image" loading="lazy">
                         <div class="poster-overlay">
@@ -114,7 +118,7 @@
                     </div>
                 </a>
 
-                <a href="details.html?id=aftersun" class="poster-card" style="text-decoration: none;">
+                <a href="details.html?id=aftersun" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Aftersun poster">
                     <div class="poster-image-wrapper">
                         <img src="assets/aftersun.png" alt="Aftersun Poster" class="poster-image" loading="lazy">
                         <div class="poster-overlay">
@@ -123,7 +127,7 @@
                     </div>
                 </a>
 
-                <a href="details.html?id=little-women" class="poster-card" style="text-decoration: none;">
+                <a href="details.html?id=little-women" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Little Women poster">
                     <div class="poster-image-wrapper">
                         <img src="assets/little women.png" alt="Little Women Poster" class="poster-image" style="object-position: top;" loading="lazy">
                         <div class="poster-overlay">
@@ -132,11 +136,29 @@
                     </div>
                 </a>
 
-                <a href="details.html?id=pearl" class="poster-card" style="text-decoration: none;">
+                <a href="details.html?id=pearl" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Pearl poster">
                     <div class="poster-image-wrapper">
                         <img src="assets/PEARL.png" alt="Pearl Poster" class="poster-image" loading="lazy">
                         <div class="poster-overlay">
                             <span>Pearl</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="details.html?id=emma" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for Emma poster">
+                    <div class="poster-image-wrapper">
+                        <img src="assets/EMMA.jpg" alt="Emma Poster" class="poster-image" loading="lazy">
+                        <div class="poster-overlay">
+                            <span>Emma.</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="details.html?id=how-to-lose-a-guy" class="poster-card" style="text-decoration: none;" aria-haspopup="dialog" aria-label="View details for How to Lose a Guy in 10 Days poster">
+                    <div class="poster-image-wrapper">
+                        <img src="assets/how to lose a guy in 10 days (1).jpg" alt="How to Lose a Guy in 10 Days Poster" class="poster-image" loading="lazy">
+                        <div class="poster-overlay">
+                            <span>How to Lose a Guy in 10 Days</span>
                         </div>
                     </div>
                 </a>
@@ -150,14 +172,14 @@
         </section>
 
         <section class="contact" id="contact">
-            <h2>Let's connect</h2>
+            <h2>Contact</h2>
             <p>Interested in collaborating or discussing my work further?</p>
-            <a href="mailto:sevval.evlice@st.uskudar.edu.tr" class="btn btn-outline">Say Hello</a>
+            <a href="mailto:sevval.evlice@st.uskudar.edu.tr" class="contact-email-link" aria-label="Send email to sevval.evlice@st.uskudar.edu.tr">sevval.evlice@st.uskudar.edu.tr</a>
         </section>
     </main>
 
     <footer class="footer">
-        <p>&copy; 2026 Frame by Frame. Designed with passion.</p>
+        <p>&copy; 2026 Frame by Şevval. Designed with passion.</p>
     </footer>
 
     <script src="data.js"></script>

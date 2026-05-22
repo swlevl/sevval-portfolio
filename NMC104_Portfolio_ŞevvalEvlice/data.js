@@ -40,5 +40,20 @@ const posterDatabase = {
         director: 'Ti West',
         cast: 'Mia Goth, David Corenswet, Tandi Wright',
         description: 'In 1918, a young woman on the brink of madness pursues stardom in a desperate attempt to escape the drudgery, isolation and lovelessness of life on her parents\' farm.'
+    },
+    'emma': {
+        title: 'Emma.',
+        image: 'assets/EMMA.jpg',
+        director: 'Autumn de Wilde',
+        cast: 'Anya Taylor-Joy, Johnny Flynn, Mia Goth',
+        description: 'In Regency-era England, a well-meaning but selfish young woman meddles in the romantic lives of her friends, leading to a series of comedic and heartwarming missteps.'
+    },
+    'how-to-lose-a-guy': {
+        title: 'How to Lose a Guy in 10 Days',
+        image: 'assets/how to lose a guy in 10 days (1).jpg',
+        director: 'Donald Petrie',
+        cast: 'Kate Hudson, Matthew McConaughey, Kathryn Hahn',
+        description: 'An advice columnist writing about how to drive a man away in 10 days starts dating an advertising executive who bet he could make any woman fall in love with him in 10 days.'
     }
 };
+

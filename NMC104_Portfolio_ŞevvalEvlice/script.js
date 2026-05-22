@@ -1,22 +1,33 @@
-document.addEventListener('DOMContentLoaded', () => {
+function init() {
     // Hamburger menu toggle
     const hamburger = document.getElementById('hamburger');
     const navContent = document.getElementById('navContent');
 
     if (hamburger && navContent) {
-        hamburger.addEventListener('click', () => {
+        function toggleHamburger() {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navContent.classList.toggle('active');
             // Prevent scrolling when menu is open
             document.body.style.overflow = navContent.classList.contains('active') ? 'hidden' : '';
+        }
+
+        hamburger.addEventListener('click', toggleHamburger);
+        
+        hamburger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleHamburger();
+            }
         });
     }
 
     // Modal Injection & Logic
     const modalHTML = `
-    <div id="posterModal" class="modal">
+    <div id="posterModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal-content">
-            <span class="close-modal">&times;</span>
+            <button class="close-modal" aria-label="Close details dialog">&times;</button>
             <div class="modal-layout">
                 <div class="modal-image-container">
                     <img id="modalImage" src="" alt="">
@@ -37,18 +48,26 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 
     const modal = document.getElementById('posterModal');
-    const closeModalBtn = document.querySelector('.close-modal');
+    const closeModalBtn = modal.querySelector('.close-modal');
+    let focusedElementBeforeModal = null;
 
     function openModal(id) {
         if (typeof posterDatabase !== 'undefined' && posterDatabase[id]) {
             const data = posterDatabase[id];
-            document.getElementById('modalImage').src = data.image;
-            document.getElementById('modalImage').alt = data.title;
+            
+            // Save active element for focus restoration
+            focusedElementBeforeModal = document.activeElement;
+
+            const modalImg = document.getElementById('modalImage');
+            modalImg.src = data.image;
+            modalImg.alt = data.title + ' cinematic poster';
+            
             if (id === 'fleabag' || id === 'little-women') {
-                document.getElementById('modalImage').style.objectPosition = 'top';
+                modalImg.style.objectPosition = 'top';
             } else {
-                document.getElementById('modalImage').style.objectPosition = 'center';
+                modalImg.style.objectPosition = 'center';
             }
+            
             document.getElementById('modalTitle').textContent = data.title;
             document.getElementById('modalDirector').textContent = data.director;
             document.getElementById('modalCast').textContent = data.cast;
@@ -56,62 +75,192 @@ document.addEventListener('DOMContentLoaded', () => {
             
             modal.classList.add('show');
             document.body.style.overflow = 'hidden';
+            
+            // Focus the close button for instant keyboard context
+            setTimeout(() => {
+                closeModalBtn.focus();
+            }, 100);
+        }
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        
+        // Restore focus to original trigger element
+        if (focusedElementBeforeModal) {
+            focusedElementBeforeModal.focus();
+            focusedElementBeforeModal = null;
         }
     }
 
     if (closeModalBtn) {
-        closeModalBtn.addEventListener('click', () => {
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-        });
+        closeModalBtn.addEventListener('click', closeModal);
     }
 
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
+            closeModal();
         }
     });
 
-    // View Controls Toggle Logic
+    // Trap focus inside modal & close on Escape key (WCAG Focus Trap)
+    modal.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+            return;
+        }
+        
+        if (e.key === 'Tab') {
+            const focusables = Array.from(modal.querySelectorAll('button, a, input, [tabindex="0"]'));
+            if (focusables.length === 0) return;
+            
+            const first = focusables[0];
+            const last = focusables[focusables.length - 1];
+            
+            if (e.shiftKey) {
+                if (document.activeElement === first) {
+                    last.focus();
+                    e.preventDefault();
+                }
+            } else {
+                if (document.activeElement === last) {
+                    first.focus();
+                    e.preventDefault();
+                }
+            }
+        }
+    });
+
+    // View Controls Toggle Logic (Dropdown - Compact Default on Mobile)
     const btnBig = document.getElementById('btn-big');
     const btnCompact = document.getElementById('btn-compact');
     const gallery = document.querySelector('.gallery');
     const viewSettingsBtn = document.getElementById('view-settings-btn');
     const viewDropdown = document.getElementById('view-dropdown');
 
+    function initViewMode() {
+        if (!gallery || !btnBig || !btnCompact) return;
+        
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            // Mobile: Default to Compact View (2 columns)
+            gallery.classList.add('compact-view');
+            btnCompact.classList.add('active');
+            btnCompact.setAttribute('aria-checked', 'true');
+            btnBig.classList.remove('active');
+            btnBig.setAttribute('aria-checked', 'false');
+        } else {
+            // Desktop: Default to Big View (4 columns)
+            gallery.classList.remove('compact-view');
+            btnBig.classList.add('active');
+            btnBig.setAttribute('aria-checked', 'true');
+            btnCompact.classList.remove('active');
+            btnCompact.setAttribute('aria-checked', 'false');
+        }
+    }
+
+    function toggleDropdown() {
+        const isOpen = viewDropdown.classList.contains('show');
+        viewDropdown.classList.toggle('show', !isOpen);
+        viewSettingsBtn.classList.toggle('active', !isOpen);
+        viewSettingsBtn.setAttribute('aria-expanded', !isOpen);
+        if (!isOpen) {
+            // Dropdown opened, focus the first item
+            setTimeout(() => btnCompact.focus(), 50);
+        }
+    }
+
+    function closeDropdown() {
+        viewDropdown.classList.remove('show');
+        viewSettingsBtn.classList.remove('active');
+        viewSettingsBtn.setAttribute('aria-expanded', 'false');
+    }
+
     if (viewSettingsBtn && viewDropdown) {
         viewSettingsBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            viewDropdown.classList.toggle('show');
-            viewSettingsBtn.classList.toggle('active');
+            toggleDropdown();
         });
 
+        viewSettingsBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                toggleDropdown();
+            }
+        });
+
+        // Close dropdown when clicking outside
         window.addEventListener('click', (e) => {
             if (!viewDropdown.contains(e.target) && !viewSettingsBtn.contains(e.target)) {
-                viewDropdown.classList.remove('show');
-                viewSettingsBtn.classList.remove('active');
+                closeDropdown();
+            }
+        });
+
+        // Dropdown internal keyboard navigation
+        viewDropdown.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDropdown();
+                viewSettingsBtn.focus();
+                e.preventDefault();
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (document.activeElement === btnCompact) {
+                    btnBig.focus();
+                } else {
+                    btnCompact.focus();
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (document.activeElement === btnBig) {
+                    btnCompact.focus();
+                } else {
+                    btnBig.focus();
+                }
+            } else if (e.key === 'Tab') {
+                // Let Tab close dropdown naturally to prevent keyboard trap
+                closeDropdown();
             }
         });
     }
 
     if (btnBig && btnCompact && gallery) {
-        btnBig.addEventListener('click', () => {
+        // Initialize layout on page load
+        initViewMode();
+
+        function setBigLayout() {
             gallery.classList.remove('compact-view');
             btnBig.classList.add('active');
+            btnBig.setAttribute('aria-checked', 'true');
             btnCompact.classList.remove('active');
-            if (viewDropdown) {
-                viewDropdown.classList.remove('show');
-                viewSettingsBtn.classList.remove('active');
-            }
-        });
-        btnCompact.addEventListener('click', () => {
+            btnCompact.setAttribute('aria-checked', 'false');
+            closeDropdown();
+            viewSettingsBtn.focus();
+        }
+
+        function setCompactLayout() {
             gallery.classList.add('compact-view');
             btnCompact.classList.add('active');
+            btnCompact.setAttribute('aria-checked', 'true');
             btnBig.classList.remove('active');
-            if (viewDropdown) {
-                viewDropdown.classList.remove('show');
-                viewSettingsBtn.classList.remove('active');
+            btnBig.setAttribute('aria-checked', 'false');
+            closeDropdown();
+            viewSettingsBtn.focus();
+        }
+
+        btnBig.addEventListener('click', setBigLayout);
+        btnBig.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setBigLayout();
+            }
+        });
+
+        btnCompact.addEventListener('click', setCompactLayout);
+        btnCompact.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setCompactLayout();
             }
         });
     }
@@ -124,33 +273,38 @@ document.addEventListener('DOMContentLoaded', () => {
             // Close mobile menu if open
             if (hamburger && navContent) {
                 hamburger.classList.remove('active');
+                hamburger.setAttribute('aria-expanded', 'false');
                 navContent.classList.remove('active');
                 document.body.style.overflow = '';
             }
 
-            const target = document.querySelector(this.getAttribute('href'));
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            const target = document.querySelector(targetId);
             if (target) {
                 target.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
+                
+                // Set keyboard focus on skipped-to section
+                target.setAttribute('tabindex', '-1');
+                target.focus({ preventScroll: true });
             }
         });
     });
 
-    // Intersection Observer for scroll animations
+    // Intersection Observer for scroll animations (Robust 0.05 Threshold)
     const observerOptions = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.15
+        threshold: 0.05
     };
 
     const observer = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
-                // Optional: unobserve after revealing if you only want it to happen once
-                // observer.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -160,14 +314,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Stagger the animations slightly based on index
     posterCards.forEach((card, index) => {
-        card.style.transitionDelay = `${index * 0.1}s`;
+        card.style.transitionDelay = `${index * 0.08}s`;
         observer.observe(card);
 
         // Intercept clicks to open modal instead of navigation
         card.addEventListener('click', (e) => {
             e.preventDefault();
             const href = card.getAttribute('href');
-            // Extract the 'id' parameter manually
             const idParam = href.split('id=')[1];
             if (idParam) {
                 openModal(idParam);
@@ -199,32 +352,53 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialize
         updateSlider();
         
-        // Auto-slide every 2 seconds
+        // Auto-slide every 2.5 seconds
         let sliderInterval = setInterval(() => {
             currentIndex = (currentIndex + 1) % sliderItems.length;
             updateSlider();
-        }, 2000);
+        }, 2500);
 
-        // Optional: Pause on hover
+        // Pause on hover or focus
         const heroSlider = document.querySelector('.hero-slider');
-        heroSlider.addEventListener('mouseenter', () => clearInterval(sliderInterval));
-        heroSlider.addEventListener('mouseleave', () => {
-            sliderInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % sliderItems.length;
-                updateSlider();
-            }, 2000);
-        });
+        if (heroSlider) {
+            heroSlider.addEventListener('mouseenter', () => clearInterval(sliderInterval));
+            heroSlider.addEventListener('mouseleave', () => {
+                clearInterval(sliderInterval);
+                sliderInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % sliderItems.length;
+                    updateSlider();
+                }, 2500);
+            });
+            
+            // Keyboard focus pausing
+            heroSlider.addEventListener('focusin', () => clearInterval(sliderInterval));
+            heroSlider.addEventListener('focusout', () => {
+                clearInterval(sliderInterval);
+                sliderInterval = setInterval(() => {
+                    currentIndex = (currentIndex + 1) % sliderItems.length;
+                    updateSlider();
+                }, 2500);
+            });
+        }
 
-        // Click to slide
-        const sliderIds = ['kill-bill', 'fleabag', 'whiplash', 'aftersun', 'little-women', 'pearl'];
+        // Click & Keyboard support to slide
+        const sliderIds = ['kill-bill', 'fleabag', 'whiplash', 'aftersun', 'little-women', 'pearl', 'emma', 'how-to-lose-a-guy'];
 
         sliderItems.forEach((item, index) => {
-            item.addEventListener('click', () => {
+            function handleSliderInteraction() {
                 if (!item.classList.contains('active')) {
                     currentIndex = index;
                     updateSlider();
                 } else {
                     openModal(sliderIds[index]);
+                }
+            }
+
+            item.addEventListener('click', handleSliderInteraction);
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleSliderInteraction();
                 }
             });
         });
@@ -237,7 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput.addEventListener('focus', () => {
             const workSection = document.getElementById('work');
             if (workSection && window.innerWidth > 768) {
-                // Adjust scroll position to account for sticky header
                 const headerOffset = 80;
                 const elementPosition = workSection.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
@@ -250,7 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         searchInput.addEventListener('input', (e) => {
-            // Normalize Turkish i/ı/I/İ characters to standard lowercase 'i' for robust searching
             const normalize = (str) => {
                 return str.replace(/İ/g, 'i')
                           .replace(/ı/g, 'i')
@@ -278,10 +450,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 
                 // Close mobile menu if open
-                const hamburger = document.getElementById('hamburger');
-                const navContent = document.getElementById('navContent');
                 if (hamburger && navContent && navContent.classList.contains('active')) {
                     hamburger.classList.remove('active');
+                    hamburger.setAttribute('aria-expanded', 'false');
                     navContent.classList.remove('active');
                     document.body.style.overflow = '';
                 }
@@ -297,10 +468,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         top: offsetPosition,
                         behavior: 'smooth'
                     });
+                    visibleCard.focus();
                 }
                 
-                searchInput.blur(); // Remove focus from input
+                searchInput.blur();
             }
         });
     }
-});
+}
+
+// Robust Page Loading: Executes immediately if the document has already parsed
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+

@@ -1,13 +1,25 @@
-document.addEventListener('DOMContentLoaded', () => {
+function initDetailsPage() {
     // Hamburger menu toggle
     const hamburger = document.getElementById('hamburger');
     const navContent = document.getElementById('navContent');
 
     if (hamburger && navContent) {
-        hamburger.addEventListener('click', () => {
+        function toggleHamburger() {
+            const expanded = hamburger.getAttribute('aria-expanded') === 'true';
+            hamburger.setAttribute('aria-expanded', !expanded);
             hamburger.classList.toggle('active');
             navContent.classList.toggle('active');
+            // Prevent scrolling when menu is open
             document.body.style.overflow = navContent.classList.contains('active') ? 'hidden' : '';
+        }
+
+        hamburger.addEventListener('click', toggleHamburger);
+        
+        hamburger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleHamburger();
+            }
         });
     }
 
@@ -15,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const movieId = urlParams.get('id');
 
-    if (movieId && posterDatabase[movieId]) {
+    if (movieId && typeof posterDatabase !== 'undefined' && posterDatabase[movieId]) {
         const movie = posterDatabase[movieId];
         
         // Populate HTML elements
@@ -42,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const descEl = document.getElementById('movieDescription');
         if (descEl) descEl.textContent = movie.description;
         
-        document.title = movie.title + " | Frame by Frame";
+        document.title = movie.title + " | Frame by Şevval";
     } else {
         // Handle error if movie not found
         const titleEl = document.getElementById('movieTitle');
@@ -57,4 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const imgEl = document.getElementById('movieImage');
         if (imgEl) imgEl.style.display = 'none';
     }
-});
+}
+
+// Robust Page Loading: Executes immediately if the document has already parsed
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDetailsPage);
+} else {
+    initDetailsPage();
+}
+
