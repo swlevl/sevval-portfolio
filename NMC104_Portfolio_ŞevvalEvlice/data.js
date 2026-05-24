@@ -54,6 +54,13 @@ const posterDatabase = {
         director: 'Donald Petrie',
         cast: 'Kate Hudson, Matthew McConaughey, Kathryn Hahn',
         description: 'An advice columnist writing about how to drive a man away in 10 days starts dating an advertising executive who bet he could make any woman fall in love with him in 10 days.'
+    },
+    'about-time': {
+        title: 'About Time',
+        image: 'assets/about time.jpg',
+        director: 'Richard Curtis',
+        cast: 'Domhnall Gleeson, Rachel McAdams, Bill Nighy',
+        description: 'At the age of 21, Tim discovers he can travel in time and change what happens and has happened in his own life. His decision to make his world a better place by getting a girlfriend turns out not to be as easy as you might think.'
     }
 };
 
