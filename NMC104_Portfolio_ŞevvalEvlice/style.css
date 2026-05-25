@@ -667,8 +667,15 @@ p {
         font-size: 2.25rem; /* Balanced static size on mobile/tablet */
     }
     
+    .subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
     .hero-content {
         margin-bottom: 3rem;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .gallery {
@@ -1146,7 +1153,26 @@ p {
     /* Adjust view controls on mobile so they don't overlap text */
     .view-controls {
         position: relative;
-        justify-content: flex-end;
-        margin-top: 1.5rem;
+        justify-content: center;
+        margin: 1.5rem auto 0 auto;
+        width: max-content;
+    }
+
+    .view-dropdown {
+        right: 50%;
+        transform: translateX(50%) translateY(-10px);
+    }
+
+    .view-dropdown.show {
+        transform: translateX(50%) translateY(0);
+    }
+
+    /* Adjust slider preview items on mobile for perfect lateral symmetry and viewport fit */
+    .slider-item.prev {
+        transform: translateX(-30%) scale(0.85) translateZ(-100px);
+    }
+    
+    .slider-item.next {
+        transform: translateX(30%) scale(0.85) translateZ(-100px);
     }
 }

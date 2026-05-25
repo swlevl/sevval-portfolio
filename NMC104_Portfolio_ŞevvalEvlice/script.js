@@ -382,7 +382,7 @@ function init() {
         }
 
         // Click & Keyboard support to slide
-        const sliderIds = ['kill-bill', 'fleabag', 'whiplash', 'aftersun', 'little-women', 'pearl', 'emma', 'how-to-lose-a-guy', 'about-time'];
+        const sliderIds = ['kill-bill', 'fleabag', 'whiplash', 'aftersun', 'little-women', 'pearl', 'emma', 'how-to-lose-a-guy', 'about-time', 'marty-supreme'];
 
         sliderItems.forEach((item, index) => {
             function handleSliderInteraction() {

@@ -8,7 +8,7 @@ const posterDatabase = {
     },
     'fleabag': {
         title: 'Fleabag',
-        image: 'assets/FLEABAG.png',
+        image: 'assets/fleabag.jpg',
         director: 'Harry Bradbeer, Tim Kirkby',
         cast: 'Phoebe Waller-Bridge, Sian Clifford, Olivia Colman',
         description: 'A dry-witted woman, known only as Fleabag, has no filter as she navigates life and love in London while trying to cope with tragedy.'
@@ -29,7 +29,7 @@ const posterDatabase = {
     },
     'little-women': {
         title: 'Little Women',
-        image: 'assets/little women.png',
+        image: 'assets/little women.jpg',
         director: 'Greta Gerwig',
         cast: 'Saoirse Ronan, Emma Watson, Florence Pugh, Eliza Scanlen',
         description: 'Jo March reflects back and forth on her life, telling the beloved story of the March sisters - four young women, each determined to live life on her own terms.'
@@ -61,6 +61,13 @@ const posterDatabase = {
         director: 'Richard Curtis',
         cast: 'Domhnall Gleeson, Rachel McAdams, Bill Nighy',
         description: 'At the age of 21, Tim discovers he can travel in time and change what happens and has happened in his own life. His decision to make his world a better place by getting a girlfriend turns out not to be as easy as you might think.'
+    },
+    'marty-supreme': {
+        title: 'Marty Supreme',
+        image: 'assets/marty supreme.jpg',
+        director: 'Josh Safdie',
+        cast: 'Timothée Chalamet, Gwyneth Paltrow, Tyler, the Creator',
+        description: 'An upcoming American biographical sports comedy-drama film directed by Josh Safdie, starring Timothée Chalamet as professional table tennis player Marty Reisman.'
     }
 };
 
