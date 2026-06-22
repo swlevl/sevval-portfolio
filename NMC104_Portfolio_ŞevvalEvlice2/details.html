@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>document.documentElement.classList.add('js');</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poster Details | Frame by Şevval</title>
+    <meta name="description" content="Poster Details">
+    <link rel="icon" type="image/png" href="frame%20by%20(1).png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3.4">
+</head>
+<body>
+    <a href="#movieTitle" class="skip-link">Skip to Poster Details</a>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <a href="index.html" style="text-decoration: none; color: inherit;" aria-label="Frame by Şevval - Back to Home">Frame by Şevval</a>
+            </div>
+            
+            <div class="nav-content" id="navContent">
+                <ul class="nav-links">
+                    <li><a href="index.html#about">About</a></li>
+                    <li><a href="index.html#work">Work</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="hamburger" id="hamburger" role="button" tabindex="0" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main class="details-main" style="padding-top: 120px; min-height: 100vh;">
+        <div class="details-container">
+            <a href="javascript:history.back()" class="back-link" aria-label="Go back to the previous gallery page">&larr; Back to Gallery</a>
+            <div class="details-layout">
+                <div class="details-image-container">
+                    <img id="movieImage" src="" alt="Loading" class="details-image">
+                </div>
+                <div class="details-content">
+                    <h1 id="movieTitle" class="details-title">Loading...</h1>
+                    <div class="details-meta">
+                        <p><strong>Director:</strong> <span id="movieDirector"></span></p>
+                        <p><strong>Cast:</strong> <span id="movieCast"></span></p>
+                    </div>
+                    <div class="details-description">
+                        <p id="movieDescription"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Frame by Şevval. Designed with passion.</p>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="details.js"></script>
+</body>
+</html>
